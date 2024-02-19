@@ -1,12 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
-import 'package:entrust/providers/user_provider.dart';
-import 'package:entrust/screens/home.dart';
+import 'package:entrust/common/widgets/bottom_bar.dart';
+import 'package:entrust/models/providers/user_provider.dart';
+import 'package:entrust/screens/admin/admin_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:entrust/constants/error_handling.dart';
-import 'package:entrust/constants/global_variables.dart';
-import 'package:entrust/constants/utils.dart';
+import 'package:entrust/common/constants/error_handling.dart';
+import 'package:entrust/common/constants/global_variables.dart';
+import 'package:entrust/common/constants/utils.dart';
 import 'package:entrust/models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +21,6 @@ class AuthService {
     required String password,
     required String username,
   }) async {
-    print('AUTH');
     try {
       User user = User(
         id: '',
@@ -67,22 +69,23 @@ class AuthService {
           'Content-Type': "application/json; charset=UTF-8",
         },
       );
-      // ignore: use_build_context_synchronously
+
       httpErrorHandler(
         response: res,
         context: context,
         onSuccess: () async {
           //SET USER IN APP
           Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-          var u = Provider.of<UserProvider>(context, listen: false).user;
-          print('>>>>>>>>>>>>>>>>>>> SIGN IN $u');
           //SET TOKEN IN MEMORY
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString("x-auth-token", jsonDecode(res.body)['token']);
           //NAVIGATE
+          print(jsonDecode(res.body)['type']);
           Navigator.pushNamedAndRemoveUntil(
             context,
-            HomeScreen.routeName,
+            jsonDecode(res.body)['type'] == "user"
+                ? BottomBar.routeName
+                : AdminScreen.routeName,
             (route) => false,
           );
         },

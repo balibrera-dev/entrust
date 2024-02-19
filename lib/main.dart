@@ -1,6 +1,10 @@
-import 'package:entrust/constants/global_variables.dart';
-import 'package:entrust/providers/user_provider.dart';
+import 'package:entrust/common/widgets/bottom_bar.dart';
+import 'package:entrust/common/constants/global_variables.dart';
+import 'package:entrust/models/providers/user_provider.dart';
+import 'package:entrust/models/users.dart';
 import 'package:entrust/router.dart';
+import 'package:entrust/screens/account/account_screen.dart';
+import 'package:entrust/screens/admin/admin_screen.dart';
 import 'package:entrust/screens/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,29 +28,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final user = Provider.of<UserProvider>(context, listen: true).user;
+    var user = Provider.of<UserProvider>(context).user;
+    print('>>>>>>>>>>>> APP OPENED');
+    print('${user.type} : ${user.token}');
 
-    final _colorScheme = ColorScheme.fromSeed(
+    final colorScheme = ColorScheme.fromSeed(
       seedColor: GlobalVariables.secondaryColor,
       background: GlobalVariables.backgroundColor,
     );
 
     return MaterialApp(
-        title: "Entrust App",
-        theme: ThemeData(
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: GlobalVariables.secondaryColor),
-          ),
-          appBarTheme: const AppBarTheme(
-            foregroundColor: Colors.white,
-            color: GlobalVariables.secondaryColor,
-          ),
-          colorScheme: _colorScheme,
-          useMaterial3: true,
+      title: GlobalVariables.appTitle,
+      theme: ThemeData(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: GlobalVariables.secondaryColor),
         ),
-        onGenerateRoute: (settings) => generateRoute(settings),
-        home: const AuthScreen() //!false ?  : const HomeScreen(),
-        );
+        appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.white,
+          color: GlobalVariables.secondaryColor,
+        ),
+        colorScheme: colorScheme,
+        useMaterial3: true,
+      ),
+      onGenerateRoute: (settings) => generateRoute(settings),
+      home: user.token.isNotEmpty
+          ? user.type == 'user'
+              ? const BottomBar()
+              : const AdminScreen()
+          : const AuthScreen(),
+    );
   }
 }

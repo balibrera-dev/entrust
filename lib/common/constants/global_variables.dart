@@ -5,6 +5,12 @@ String uri = 'http://10.0.2.2:8000';
 // String uri = 'https://entrust-app-08945e861417.herokuapp.com';
 
 class GlobalVariables {
+  //APP
+  static String appTitle = "Entrust App";
+  //NAVIGATION
+  static double bottomNavigationBarWidth = 42;
+  static double bottomBarBorderWidth = 5;
+
   // COLORS
   static const appBarGradient = LinearGradient(
     colors: [
@@ -35,19 +41,19 @@ class GlobalVariables {
       'image': 'assets/images/mobiles.jpeg',
     },
     {
-      'title': 'Essentials',
+      'title': 'Escenciales',
       'image': 'assets/images/essentials.jpeg',
     },
     {
-      'title': 'Appliances',
+      'title': 'Electrónicos',
       'image': 'assets/images/appliances.jpeg',
     },
     {
-      'title': 'Books',
+      'title': 'Libros',
       'image': 'assets/images/books.jpeg',
     },
     {
-      'title': 'Fashion',
+      'title': 'Moda',
       'image': 'assets/images/fashion.jpeg',
     },
   ];
